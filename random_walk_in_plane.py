@@ -6,6 +6,7 @@
 #   And move the point by that angle with a distance of 1.
 #   The Expected value of the square of the distance is n.
 #   E(D^2) = n
+
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
@@ -15,15 +16,16 @@ import matplotlib.pyplot as plt
 # Point in (x,y)
 # point = (0.0, 0.0)
 
-def update(point):
-    # Generate a uniformly distributed angle [0,2Pi) in radians
-    angle = np.random.uniform(2 * np.pi)
-    print angle
+def walk(n):
+    point = (0.0, 0.0)
 
-    x = point[0] + np.cos(angle)
-    y = point[1] + np.sin(angle)
+    for i in range(n):
+        angle = np.random.uniform(2 * np.pi)
+        xi = point[0] + np.cos(angle)
+        yi = point[1] + np.sin(angle)
+        point = (xi, yi)
 
-    return (x,y)
+    return distance2(point)
 
 def distance2(point):
     # Calculate the distance^2 of the point from the origin
@@ -32,18 +34,16 @@ def distance2(point):
 
 if __name__ == "__main__":
     n = int(sys.argv[1])
+    trials = 1000
 
-    points = np.zeros(shape=(n,n), dtype=np.float)
-    point = (0.0, 0.0)
-    points.push(point)
+    result = 0.0
+    for i in range(trials):
+        result += walk(n)
+    result /= trials
 
-    for i in range(n):
-        point = update(point)
-        points.push(point)
+    print result
 
-    print distance2(point)
-
-    plt.plot(points, color='r', marking='o')
-    plt.title('Random Walk in Plane')
-    plt.axis([-n,n,-n,n])
-    plt.show()
+    # plt.plot(points, color='r', marking='o')
+    # plt.title('Random Walk in Plane')
+    # plt.axis([-n,n,-n,n])
+    # plt.show()
